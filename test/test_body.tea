@@ -1,6 +1,6 @@
 [
     {
-        ele: "div",
+        tag: "div",
         id: "my-block",
         class: ["btn", "bg-green"],
         attributes: [
@@ -12,7 +12,7 @@
         child: [
             "Hello, WORLD!",
             {
-                ele: "span",
+                tag: "span",
                 css: `
                 color: brown;
                 `,
@@ -22,4 +22,4 @@
             }
         ]
     }
-], {insert_location: "header"}
+], {mount: "header"}

@@ -5,7 +5,8 @@ var ink = Tea.require("Ink")
 new cream(
     [
         {
-            ele: "div",
+            tag
+            : "div",
             id: "my-block",
             class: ["btn", "bg-green"],
             attributes: [
@@ -17,7 +18,8 @@ new cream(
             child: [
                 "{{mes}} ",
                 {
-                    ele: "span",
+                    tag
+                    : "span",
                     css: `
                     color: brown;
                     `,
@@ -27,10 +29,10 @@ new cream(
                 }
             ]
         }
-    ]//, {insert_location: "header"}
+    ]//, {mount: "header"}
 )
 var m = "tea"
-new ink(
+var ins = new ink(
     {
         el: '#my-block',
         data: [
