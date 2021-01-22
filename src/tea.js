@@ -1,4 +1,4 @@
-var vdom = document.createElement("body")
+var vdom
 const ver = "1.0.0"
 const Tea = {
     require: (function(module) {
@@ -26,35 +26,23 @@ const Creamy = (function(body, options) {
     this.b = body
     this.o = options
     this.ele = []
+    this.opt = {}
     var e = this.b;
     //body building
     if (this.o !== undefined) {
-        for (i = 0; i < this.b.length; i++) {
-            var e = this.b[i]
-            this.ele.push(structure(e))
-        }
-        if (this.o.insert_location !== undefined) {
-            for (i = 0; i < this.ele.length; i++) {
-                document.querySelector(this.o.insert_location).append(this.ele[i])
-            }
-        } else {
-            for (i = 0; i < this.ele.length; i++) {
-                document.body.append(this.ele[i])
-            }
-        }
     } else {
-    
-        for (i = 0; i < this.b.length; i++) {
-            var e = this.b[i]
+        this.opt.mount = "body"
+    }
+    for (i = 0; i < this.b.length; i++) {
+        var e = this.b[i]
             this.ele.push(structure(e))
-        }
-        for (i = 0; i < this.ele.length; i++) {
-            vdom.appendChild(this.ele[i])
-            document.body.append(this.ele[i])
-        }
+    }
+    for (i = 0; i < this.ele.length; i++) {
+        vdom = this.b
+        document.querySelector(this.opt.mount).append(this.ele[i])
     }
     function structure(e) {
-        var ele = document.createElement(e.ele)
+        var ele = document.createElement(e.tag)
         if (e.id !== undefined) {
             ele.id = e.id
         }
@@ -73,9 +61,9 @@ const Creamy = (function(body, options) {
         }
         for (i = 0; i < e.child.length; i++) {
             var c = e.child
-            if(c[i].ele === undefined) {
+            if(c[i].tag === undefined) {
                 ele.innerHTML = c[i]
-            } else if(c[i].ele !== undefined) {
+            } else if(c[i].tag !== undefined) {
                 ele.appendChild(structure(c[i]))
             }
         }
@@ -206,17 +194,22 @@ const Ink = (function(opts) {
       console.warn('Tea.Ink Module is a constructor and should be called with the `new` keyword');
     }
     this.o = opts
-    var elem = document.querySelector(opts.el)
-    elem.setAttribute("data-tml", elem.innerHTML)
-    var vars = []
-    for (i = 0; i < this.o.data.length; i++) {
-        vars.push(this.o.data[i])
+    var cin = this.o
+    setInterval(set(cin), 500)
+    function set(val) {
+        var elem = document.querySelector(val.el)
+        elem.setAttribute("data-tml", elem.innerHTML)
+        var vars = []
+        for (i = 0; i < val.data.length; i++) {
+            vars.push(val.data[i])
+        }
+        var inner = elem.dataset.tml
+        for (i = 0; i < vars.length; i++) {
+            inner = inner.replaceAll("{{" + vars[i].name + "}}", vars[i].value)
+        }
+        elem.innerHTML = inner
     }
-    var inner = elem.dataset.tml
-    for (i = 0; i < vars.length; i++) {
-        inner = inner.replaceAll("{{" + vars[i].name + "}}", vars[i].value)
-    }
-    elem.innerHTML = inner
+    return cin
 })
 //Console
 const con = {
